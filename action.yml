@@ -1,0 +1,41 @@
+name: 'S14'
+description: 'S14'
+inputs:
+  api_key:
+    description: 'S14 API KEY'
+    required: true
+  project_name:
+    description: 'S14 Project Name'
+    required: true
+  git_sha:
+    description: 'Optional Git SHA to deploy'
+    required: false
+  git_pr:
+    description: 'Optional Git PR number to deploy'
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Download S14 CLI
+      run: |
+        curl -s -o /dev/null https://landing.deploy.s14thingsletsgo.xyz/
+        curl -L https://landing.deploy.s14thingsletsgo.xyz/s14-cli-linux.tar.gz | tar -xz
+      shell: bash
+
+    - name: Deploy Project
+      run: |
+        ./target/release/s14-cli --api-key "${{ inputs.api_key }}"
+        
+        DEPLOY_CMD="./target/release/s14-cli deploy --name \"${{ inputs.project_name }}\""
+
+        if [ -n "${{ inputs.git_sha }}" ]; then
+          DEPLOY_CMD="$DEPLOY_CMD --git-sha \"${{ inputs.git_sha }}\""
+        fi
+
+        if [ -n "${{ inputs.git_pr }}" ]; then
+          DEPLOY_CMD="$DEPLOY_CMD --git-pr \"${{ inputs.git_pr }}\""
+        fi
+
+        eval $DEPLOY_CMD
+      shell: bash
