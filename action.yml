@@ -25,7 +25,7 @@ runs:
 
     - name: Deploy Project
       run: |
-        ./target/release/s14-cli --api-key "${{ inputs.api_key }}"
+        ./target/release/s14-cli login --api-key "${{ inputs.api_key }}"
         
         DEPLOY_CMD="./target/release/s14-cli deploy --name \"${{ inputs.project_name }}\""
 
