@@ -25,9 +25,7 @@ runs:
 
     - name: Deploy Project
       run: |
-        ./target/release/s14-cli login --api-key "${{ inputs.api_key }}"
-        
-        DEPLOY_CMD="./target/release/s14-cli deploy --name \"${{ inputs.project_name }}\""
+        DEPLOY_CMD="./target/release/s14-cli deploy --api-key "${{ inputs.api_key }}" --name \"${{ inputs.project_name }}\""
 
         if [ -n "${{ inputs.git_sha }}" ]; then
           DEPLOY_CMD="$DEPLOY_CMD --git-sha \"${{ inputs.git_sha }}\""
